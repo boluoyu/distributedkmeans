@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="hadoop-mapreduce-examples-2.7.0">
+    <CLASSES>
+      <root url="jar:///usr/local/Cellar/hadoop/2.7.0/libexec/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
