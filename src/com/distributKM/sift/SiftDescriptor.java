@@ -39,8 +39,8 @@ public class SiftDescriptor {
 
     }
     public  static SiftDescriptor getRandomSift(){
-         SiftDescriptor sift = new SiftDescriptor();
-        for( int i = 0;i< sift.getDescArray().length; i++){
+        SiftDescriptor sift = new SiftDescriptor();
+        for( int i = 0;i < sift.getDescArray().length; i++){
             sift.getDescArray()[i]= (int)(Math.random() * 256);
         }
         return sift;
@@ -120,8 +120,6 @@ public class SiftDescriptor {
     }
 
     public static boolean isClusterDistanceLessThenThreshold(List<SiftDescriptor> cluster1, List<SiftDescriptor> cluster2, double threshold){
-        boolean result = false;
-
         //use cluster1 as driven side , 2 list should be same sized
 
         int size1= cluster1.size();
@@ -130,13 +128,11 @@ public class SiftDescriptor {
            int distanceOfEachCenter =  cluster1.get(i).getDistance(cluster2.get(i));
            if (distanceOfEachCenter > threshold) {
                // as long as distance of one pair of center is longer than threshold, return false immediately
-               result = false;
-               return result;
+               return false;
            }
        }
 
-        result = true;
-        return result;
+        return true;
     }
 
     public static List<SiftDescriptor> getCenterClusterFromInStream (InputStream is) throws IOException {

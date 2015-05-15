@@ -61,7 +61,7 @@ public class KmeanLocal {
 
             // find new Center for sift cluster
             SiftDescriptor newCenter = new SiftDescriptor();
-            int loop =0;
+            int loop = 0;
             for (Text siftLine : values) {
                 newCenter.add(new SiftDescriptor(siftLine.toString()));
                 loop++;
@@ -84,18 +84,35 @@ public class KmeanLocal {
         job.setOutputValueClass(Text.class);
         Configuration conf = job.getConfiguration();
         String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
-        if (otherArgs.length < 2) {
-            System.err.println("Usage: Kmean <in> [<in>...] <out>");
+        if (otherArgs.length < 3) {
+            System.err.println("Usage: Kmean <clusterNum> <in> [<in>...] <out>");
             System.exit(2);
         }
 
-        for (int i = 0; i < otherArgs.length - 1; ++i) {
-            FileInputFormat.addInputPath(job, new Path(otherArgs[i]));
-        }
-        FileOutputFormat.setOutputPath(job,
-                new Path(otherArgs[otherArgs.length - 1]));
+        FileInputFormat.addInputPath(job, new Path(otherArgs[1]));
+
+        FileOutputFormat.setOutputPath(job, new Path(otherArgs[2]));
 
         return job;
+    }
+
+    public static void initCentroids(int clusterNum) throws Exception{
+        File centerF = new File("KM_center/centers");
+        if(!centerF.exists()) {
+            centerF.createNewFile();
+        }
+
+        FileWriter centerFWrite = new FileWriter(centerF);
+
+        for(int i = 0; i < clusterNum; i++){
+            SiftDescriptor randomSift = SiftDescriptor.getRandomSift();
+            StringBuilder sb = new StringBuilder();
+            sb.append(i);
+            sb.append("\t");
+            sb.append(randomSift.toString() + "\n");
+            centerFWrite.write(sb.toString());
+        }
+        centerFWrite.close();
     }
 
     public static void main(String[] args) throws Exception {
@@ -104,6 +121,10 @@ public class KmeanLocal {
         int MAX_LOOP = 1000;
         boolean isCenterFixed = false;
         int loop = 0;
+        int k = Integer.parseInt(args[0]);
+
+        initCentroids(k);
+
         while(loop<MAX_LOOP && !isCenterFixed ){
             Job job = getMapReduceJob(args);
 
@@ -115,7 +136,7 @@ public class KmeanLocal {
             List <SiftDescriptor> newCenter = SiftDescriptor.getCenterClusterFromInStream(new FileInputStream(outputF));
             List <SiftDescriptor> oldCenter = SiftDescriptor.getCenterClusterFromInStream(new FileInputStream(centerF));
 
-            isCenterFixed = SiftDescriptor.isClusterDistanceLessThenThreshold(newCenter,oldCenter,100);
+            isCenterFixed = SiftDescriptor.isClusterDistanceLessThenThreshold(newCenter,oldCenter, 100);
 
             outputF.renameTo(centerF);
             System.out.println("again!!!----" + loop);
