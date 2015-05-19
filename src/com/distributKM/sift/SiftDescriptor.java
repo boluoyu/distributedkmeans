@@ -181,10 +181,13 @@ public class SiftDescriptor {
      */
     public static String getHistogram(String fileIndex,
                                       List<SiftDescriptor> siftCluster,
-                                      List<SiftDescriptor> centroidCluster) throws Exception{
+                                      List<SiftDescriptor> centroidCluster,
+                                      FileWriter totalWriter) throws Exception{
         String histogram = new String();
         String result = "";
         String regionD = "KM_region/";
+
+
         // 区域矩阵
         File regionF = new File(regionD + fileIndex + ".mask");
         int[][] regionMatrix = getRegionMartixFromInStream(new FileInputStream(regionF));
@@ -203,15 +206,23 @@ public class SiftDescriptor {
         }
 
 
-        for (int i = 0; i < maxRegion + 2; i ++){
+        for (int i = 0; i < maxRegion + 1; i ++){
             result += i;
             result += " ";
             for (int j = 0; j < centroidNumber; j ++) {
                 result += String.valueOf(resultMatrix[i][j]);
                 result += " ";
+
             }
             result += "\n";
         }
+        String total = fileIndex + " ";
+        for(int k = 0; k < centroidNumber; k ++){
+            total += String.valueOf(resultMatrix[maxRegion + 1][k]);
+            total += " ";
+        }
+        total += "\n";
+        totalWriter.write(total);
 
         return result;
     }
