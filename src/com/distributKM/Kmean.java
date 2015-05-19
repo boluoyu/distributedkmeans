@@ -134,8 +134,8 @@ public class Kmean {
             List <SiftDescriptor> newCenterCluster = SiftDescriptor.getCenterClusterFromInStream(fs.open(newCenterPath));
             List <SiftDescriptor> oldCenterCluster = SiftDescriptor.getCenterClusterFromInStream(fs.open(centerPath));
 
-            int maxDistance = SiftDescriptor.maxDistance(newCenterCluster, oldCenterCluster, k);
-            if(maxDistance < 100) isCenterFixed = true;
+            double maxDistance = SiftDescriptor.maxDistance(newCenterCluster, oldCenterCluster, k);
+            if(maxDistance < 0.0001) isCenterFixed = true;
 
             // replace old centre files with latest generated one
             // then delete old output folder

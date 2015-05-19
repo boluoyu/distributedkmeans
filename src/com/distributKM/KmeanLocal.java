@@ -21,19 +21,19 @@ import org.apache.hadoop.util.GenericOptionsParser;
  * Created by lichaochen on 15/5/14.
  */
 public class KmeanLocal {
+    public static List<SiftDescriptor> centerCluster;
 
     public static class KmeansMaper
             extends Mapper<Object, Text, IntWritable, Text >{
 
+        protected void setup(Context context) throws IOException, InterruptedException {
+            super.setup(context);
+            centerCluster = SiftDescriptor.getCenterClusterFromInStream(new FileInputStream( new File("KM_center/centers")));
+        }
+
 
         public void map(Object key, Text value, Context context
         ) throws IOException, InterruptedException {
-
-
-            /*collect centers from file*/
-
-            List <SiftDescriptor> centerCluster  ;
-            centerCluster = SiftDescriptor.getCenterClusterFromInStream(new FileInputStream( new File("KM_center/centers")));
 
             /* find corresponding center for given sift descriptor */
 
@@ -135,8 +135,8 @@ public class KmeanLocal {
             List <SiftDescriptor> newCenter = SiftDescriptor.getCenterClusterFromInStream(new FileInputStream(outputF));
             List <SiftDescriptor> oldCenter = SiftDescriptor.getCenterClusterFromInStream(new FileInputStream(centerF));
 
-            int maxDistance = SiftDescriptor.maxDistance(newCenter, oldCenter, k);
-            isCenterFixed =  maxDistance < 100;
+            double maxDistance = SiftDescriptor.maxDistance(newCenter, oldCenter, k);
+            isCenterFixed =  maxDistance < 0.0001;
 
             outputF.renameTo(centerF);
             System.out.println("again!!!----" + loop + " distance: " + maxDistance);

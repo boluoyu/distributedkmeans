@@ -99,9 +99,9 @@ public class SiftDescriptor {
 
 
     // 计算两个点之间的距离，欧式距离
-    public int getDistance(SiftDescriptor another) {
+    public double getDistance(SiftDescriptor another) {
 
-        int sum = 0;
+        double sum = 0.0;
         for (int i = 4; i < this.getDescArray().length; i++) {
             sum += (this.getDescArray()[i] - another.getDescArray()[i]) * (this.getDescArray()[i] - another.getDescArray()[i]);
         }
@@ -112,10 +112,10 @@ public class SiftDescriptor {
     // 寻找最相近的点
     public SiftDescriptor findNearest(List<SiftDescriptor> list) {
 
-        int minDistance = Integer.MAX_VALUE;
+        double minDistance = Double.MAX_VALUE;
         SiftDescriptor nearest = this;
         for (SiftDescriptor another : list) {
-            int distance = this.getDistance(another);
+            double distance = this.getDistance(another);
             if (distance < minDistance) {
                 minDistance = distance;
                 nearest = another;
@@ -126,13 +126,13 @@ public class SiftDescriptor {
     }
 
     // 判断质心之间的移动是否已经满足阈值
-    public static int maxDistance(List<SiftDescriptor> cluster1,
+    public static double maxDistance(List<SiftDescriptor> cluster1,
                                       List<SiftDescriptor> cluster2,
                                       int centroidNumber) {
         //use cluster1 as driven side , 2 list should be same sized
         Map<Integer, SiftDescriptor> newCentroids = new HashMap<Integer, SiftDescriptor>();
         Map<Integer, SiftDescriptor> oldCentroids = new HashMap<Integer, SiftDescriptor>();
-        int maxDistance = 0;
+        double maxDistance = 0.0;
 
         for (SiftDescriptor centroid : cluster1){
             newCentroids.put(centroid.getIndex(), centroid);
@@ -143,7 +143,7 @@ public class SiftDescriptor {
 
         for (int i = 0; i < centroidNumber + 1; i++) {
             if(newCentroids.get(i) != null) {
-                int distanceOfEachCenter = newCentroids.get(i).getDistance(oldCentroids.get(i));
+                double distanceOfEachCenter = newCentroids.get(i).getDistance(oldCentroids.get(i));
                 if(maxDistance < distanceOfEachCenter) maxDistance = distanceOfEachCenter;
             }
         }
