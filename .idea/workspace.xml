@@ -27,11 +27,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="KmeanLocal.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="KmeanLocal.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/distributKM/KmeanLocal.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="134" column="48" selection-start-line="134" selection-start-column="48" selection-end-line="134" selection-end-column="48" />
+            <state vertical-scroll-proportion="0.4957265">
+              <caret line="128" column="0" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -42,8 +42,8 @@
       <file leaf-file-name="SiftDescriptor.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/distributKM/sift/SiftDescriptor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.62069">
-              <caret line="350" column="73" selection-start-line="350" selection-start-column="73" selection-end-line="350" selection-end-column="73" />
+            <state vertical-scroll-proportion="-5.6896553">
+              <caret line="253" column="51" selection-start-line="253" selection-start-column="51" selection-end-line="253" selection-end-column="51" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3411#3436#0" expanded="true" />
@@ -68,11 +68,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Histogram.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Histogram.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/distributKM/Histogram.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.09615385">
-              <caret line="22" column="57" selection-start-line="22" selection-start-column="8" selection-end-line="22" selection-end-column="57" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="8" column="28" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#716#722#0" expanded="true" />
@@ -109,9 +109,9 @@
         <option value="$PROJECT_DIR$/KM_center/centers" />
         <option value="$PROJECT_DIR$/src/com/distributKM/BoW.java" />
         <option value="$PROJECT_DIR$/src/com/distributKM/Histogram.java" />
-        <option value="$PROJECT_DIR$/src/com/distributKM/sift/SiftDescriptor.java" />
         <option value="$PROJECT_DIR$/src/com/distributKM/Kmean.java" />
         <option value="$PROJECT_DIR$/src/com/distributKM/KmeanLocal.java" />
+        <option value="$PROJECT_DIR$/src/com/distributKM/sift/SiftDescriptor.java" />
       </list>
     </option>
   </component>
@@ -240,20 +240,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="out" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DistributeKMeans" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DistributeKMeans" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="KM_input" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -620,7 +606,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -638,7 +624,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17734376" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3373174" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3373174" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -923,31 +909,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/distributKM/KmeanLocal.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="134" column="48" selection-start-line="134" selection-start-column="48" selection-end-line="134" selection-end-column="48" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/distributKM/sift/SiftDescriptor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.62069">
-          <caret line="350" column="73" selection-start-line="350" selection-start-column="73" selection-end-line="350" selection-end-column="73" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3411#3436#0" expanded="true" />
-            <element signature="e#3503#3528#0" expanded="true" />
-            <element signature="e#6521#6531#0" expanded="true" />
-            <element signature="e#8215#8231#0" expanded="true" />
-            <element signature="e#8870#8895#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/distributKM/Kmean.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -960,11 +921,36 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/distributKM/Histogram.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.09615385">
-          <caret line="22" column="57" selection-start-line="22" selection-start-column="8" selection-end-line="22" selection-end-column="57" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="8" column="28" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#716#722#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/distributKM/sift/SiftDescriptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.6896553">
+          <caret line="253" column="51" selection-start-line="253" selection-start-column="51" selection-end-line="253" selection-end-column="51" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3411#3436#0" expanded="true" />
+            <element signature="e#3503#3528#0" expanded="true" />
+            <element signature="e#6521#6531#0" expanded="true" />
+            <element signature="e#8215#8231#0" expanded="true" />
+            <element signature="e#8870#8895#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/distributKM/KmeanLocal.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4957265">
+          <caret line="128" column="0" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

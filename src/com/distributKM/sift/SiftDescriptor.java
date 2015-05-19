@@ -252,7 +252,7 @@ public class SiftDescriptor {
     //获取sift的区域编号
     private int getRegion(int[][] regionMatrix) {
         int x = (int)Math.round(getDescArray()[1]);
-        int y = (int)Math.round(getDescArray()[2]);
+        int y = (int)Math.round(getDescArray()[0]);
 
         return regionMatrix[x][y];
     }
