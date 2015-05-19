@@ -56,8 +56,8 @@ public class Kmean {
             //  identify center for each sift
             String siftLine = value.toString();
             SiftDescriptor sift = new SiftDescriptor(siftLine);
-            SiftDescriptor center = sift.findMostSimilar(centerCluster);
-            int centerKey = centerCluster.indexOf(center);
+            SiftDescriptor center = sift.findNearest(centerCluster);
+            int centerKey = center.getIndex();
             context.write(new IntWritable(centerKey) ,value);
 
         }
@@ -117,6 +117,7 @@ public class Kmean {
         // in case infinitive loop
         int MAX_LOOP = 9999;
         boolean isCenterFixed = false;
+        int k = Integer.parseInt(args[0]);
 
         while (loop < MAX_LOOP  && !isCenterFixed ) {
 
@@ -133,7 +134,8 @@ public class Kmean {
             List <SiftDescriptor> newCenterCluster = SiftDescriptor.getCenterClusterFromInStream(fs.open(newCenterPath));
             List <SiftDescriptor> oldCenterCluster = SiftDescriptor.getCenterClusterFromInStream(fs.open(centerPath));
 
-            isCenterFixed = SiftDescriptor.isClusterDistanceLessThenThreshold(newCenterCluster,oldCenterCluster,100);
+            int maxDistance = SiftDescriptor.maxDistance(newCenterCluster, oldCenterCluster, k);
+            if(maxDistance < 100) isCenterFixed = true;
 
             // replace old centre files with latest generated one
             // then delete old output folder

@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
 import java.io.FileWriter;
+import java.util.LinkedList;
 
 /**
  * Created by pishilong on 15/5/15.
@@ -19,22 +20,23 @@ public class Histogram {
         if (!histogram.exists()) {
             histogram.createNewFile();
         }
-        FileWriter hisWriter=new FileWriter(histogram);
+        FileWriter hisWriter = new FileWriter(histogram);
 
         File[] files = siftD.listFiles();
-        java.util.LinkedList<File> filelist = new java.util.LinkedList<File>();
+        LinkedList<File> filelist = new LinkedList<File>();
         for (int i = 0; i < files.length; i ++){
             String fileName = files[i].getName();
-            if (fileName.endsWith("descr")) {
+            if (fileName.endsWith("sift")) {
                 filelist.add(files[i]);
             }
         }
 
         List<SiftDescriptor> centerCluster = SiftDescriptor.getCenterClusterFromInStream(new FileInputStream(centerF));
         for (File file : filelist){
+            String fileIndex = file.getName().split("\\.")[0];
             List<SiftDescriptor> siftCluster = SiftDescriptor.getsiftClusterFromInStream(new FileInputStream(file));
-            String histogramResult = SiftDescriptor.getHistogram(siftCluster, centerCluster);
-            String content = "image " + file.getName().split("\\.")[0] + "'s histogram: " + histogramResult + "\n";
+            String histogramResult = SiftDescriptor.getHistogram(fileIndex, siftCluster, centerCluster);
+            String content = "image " + fileIndex + "'s histogram: \n" + histogramResult + "\n";
             hisWriter.write(content);
         }
         hisWriter.close();

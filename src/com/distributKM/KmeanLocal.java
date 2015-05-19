@@ -16,7 +16,6 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
-import org.mortbay.jetty.HttpParser;
 
 /**
  * Created by lichaochen on 15/5/14.
@@ -40,9 +39,9 @@ public class KmeanLocal {
 
             String siftLine = value.toString();
             SiftDescriptor sift = new SiftDescriptor(siftLine);
-            SiftDescriptor center = sift.findMostSimilar(centerCluster);
+            SiftDescriptor center = sift.findNearest(centerCluster);
 
-            int centerKey = centerCluster.indexOf(center);
+            int centerKey = center.getIndex();
 
             context.write(new IntWritable(centerKey) ,value);
 
@@ -136,19 +135,20 @@ public class KmeanLocal {
             List <SiftDescriptor> newCenter = SiftDescriptor.getCenterClusterFromInStream(new FileInputStream(outputF));
             List <SiftDescriptor> oldCenter = SiftDescriptor.getCenterClusterFromInStream(new FileInputStream(centerF));
 
-            isCenterFixed = SiftDescriptor.isClusterDistanceLessThenThreshold(newCenter,oldCenter, 100);
+            int maxDistance = SiftDescriptor.maxDistance(newCenter, oldCenter, k);
+            isCenterFixed =  maxDistance < 100;
 
             outputF.renameTo(centerF);
-            System.out.println("again!!!----" + loop);
+            System.out.println("again!!!----" + loop + " distance: " + maxDistance);
             new File("KM_output/._SUCCESS.crc").delete();
             new File("KM_output/.part-r-00000.crc").delete();
             new File("KM_output/_SUCCESS").delete();
             new File("KM_output").delete();
+            File newCenterFile = new File("KM_center/centers");
+            //填充缺失的质心
+            SiftDescriptor.fullfillCenter(newCenterFile, newCenter, k);
             loop ++;
         }
 
-
-
-//        System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
 }
