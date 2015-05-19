@@ -16,11 +16,8 @@ public class Histogram {
     public static void main(String[] args) throws Exception {
         File centerF = new File("KM_center/centers");
         File siftD = new File("KM_input");
-        File histogram = new File("histogram");
-        if (!histogram.exists()) {
-            histogram.createNewFile();
-        }
-        FileWriter hisWriter = new FileWriter(histogram);
+        String histogramDic = "histogram/";
+
 
         File[] files = siftD.listFiles();
         LinkedList<File> filelist = new LinkedList<File>();
@@ -34,11 +31,14 @@ public class Histogram {
         List<SiftDescriptor> centerCluster = SiftDescriptor.getCenterClusterFromInStream(new FileInputStream(centerF));
         for (File file : filelist){
             String fileIndex = file.getName().split("\\.")[0];
+            File hisFile = new File(histogramDic + fileIndex + ".his");
+            if(!hisFile.exists()) hisFile.createNewFile();
+            FileWriter hisWriter = new FileWriter(hisFile);
             List<SiftDescriptor> siftCluster = SiftDescriptor.getsiftClusterFromInStream(new FileInputStream(file));
             String histogramResult = SiftDescriptor.getHistogram(fileIndex, siftCluster, centerCluster);
-            String content = "image " + fileIndex + "'s histogram: \n" + histogramResult + "\n";
-            hisWriter.write(content);
+            hisWriter.write(histogramResult);
+            hisWriter.close();
         }
-        hisWriter.close();
+
     }
 }
