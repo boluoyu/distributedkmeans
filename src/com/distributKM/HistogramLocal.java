@@ -1,25 +1,37 @@
 package com.distributKM;
 
 import com.distributKM.sift.SiftDescriptor;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.List;
-import java.io.FileWriter;
-import java.util.LinkedList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.io.*;
+import java.util.*;
 
 /**
  * Created by pishilong on 15/5/15.
  */
-public class Histogram {
+public class HistogramLocal {
+
 
     public static void main(String[] args) throws Exception {
-        File centerF = new File("KM_center/centers");
-        File siftD = new File("KM_input");
-        String histogramDic = "histogram/";
-        File totalFile = new File("histogram/total.his");
+
+        if(args.length<4){
+            System.err.println("Usage: HistogramLocal <input_folder> <center_file> <mask_folder> <histogram_folder>");
+            System.err.println("Example: Histogram  KM_input/ KM_center/centers KM_mask/ KM_histogram/ ");
+            System.exit(2);
+        }
+
+
+        String inputDic = args[0];
+        String centerLocation = args[1];
+        String maskLocation = args[2];
+        String histogramDic = args[3];
+
+        File centerF = new File(centerLocation);
+        File siftD = new File(inputDic);
+
+
+        File totalFile = new File(histogramDic+"total.his");
         if(totalFile.exists()) totalFile.delete();
         totalFile.createNewFile();
         FileWriter totalWriter = new FileWriter(totalFile, true);
@@ -53,7 +65,7 @@ public class Histogram {
             if(!hisFile.exists()) hisFile.createNewFile();
             FileWriter hisWriter = new FileWriter(hisFile);
             List<SiftDescriptor> siftCluster = SiftDescriptor.getsiftClusterFromInStream(new FileInputStream(file));
-            String histogramResult = SiftDescriptor.getHistogram(fileIndex, siftCluster, centerCluster, totalWriter);
+            String histogramResult = SiftDescriptor.getHistogram(fileIndex, siftCluster, centerCluster, totalWriter, maskLocation);
             hisWriter.write(histogramResult);
             hisWriter.close();
         }
