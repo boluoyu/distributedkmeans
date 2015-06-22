@@ -17,7 +17,7 @@ public class HistogramLocal {
 
         if(args.length<4){
             System.err.println("Usage: HistogramLocal <input_folder> <center_file> <mask_folder> <histogram_folder>");
-            System.err.println("Example: Histogram  KM_input/ KM_center/centers KM_mask/ KM_histogram/ ");
+            System.err.println("Example: HistogramLocal  KM_input/ KM_center/centers KM_mask/ KM_histogram/ ");
             System.exit(2);
         }
 

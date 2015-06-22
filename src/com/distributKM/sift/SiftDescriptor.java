@@ -229,7 +229,7 @@ public class SiftDescriptor {
         // 质心数目
         int centroidNumber = centroidCluster.size();
 
-        int[][] resultMatrix = new int[maxRegion + 2][centroidNumber];
+        int[][] resultMatrix = new int[maxRegion + 2][centroidNumber + 1];
 
         for (SiftDescriptor sift : siftCluster) {
             SiftDescriptor centroid = sift.findNearest(centroidCluster);
@@ -237,16 +237,26 @@ public class SiftDescriptor {
             int cenKey = centroidCluster.indexOf(centroid);
             resultMatrix[region][cenKey] ++;
             resultMatrix[maxRegion + 1][cenKey] ++;
+            resultMatrix[maxRegion + 1][centroidNumber] ++;
         }
 
 
         for (int i = 0; i < maxRegion + 1; i ++){
             result += i;
             result += " ";
+            //计算当前region所有的sift数
+            for(int k = 0; k < centroidNumber; k ++){
+                resultMatrix[i][centroidNumber] += resultMatrix[i][k];
+            }
+            System.out.println(fileIndex + "号图片" + i + "号区域共有 " + resultMatrix[i][centroidNumber] + "个sift特征" );
             for (int j = 0; j < centroidNumber; j ++) {
-                result += String.valueOf(resultMatrix[i][j]);
+                if (resultMatrix[i][centroidNumber] > 0){
+                    //System.out.println((float)resultMatrix[i][j] + " 除以 " + (float)resultMatrix[i][centroidNumber] + " = " + (float)resultMatrix[i][j] / (float)resultMatrix[i][centroidNumber]);
+                    result += String.valueOf((float)resultMatrix[i][j] / (float)resultMatrix[i][centroidNumber]);//直方图数据归一化
+                }else{
+                    result += "0.0";
+                }
                 result += " ";
-
             }
             result += "\n";
         }
