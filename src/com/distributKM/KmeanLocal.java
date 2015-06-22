@@ -114,29 +114,47 @@ public class KmeanLocal {
         centerFWrite.close();
     }
 
+
+    public static void initCentroids(int clusterNum, OutputStream centerOutStream) throws Exception{
+
+        BufferedOutputStream  bs = new BufferedOutputStream(centerOutStream);
+        for(int i = 0; i < clusterNum; i++){
+            SiftDescriptor randomSift = SiftDescriptor.getRandomSift();
+            StringBuilder sb = new StringBuilder();
+            sb.append(i);
+            sb.append("\t");
+            sb.append(randomSift.toString() + "\n");
+            bs.write(sb.toString().getBytes());
+
+        }
+        bs.close();
+    }
+
     public static void main(String[] args) throws Exception {
 
 
         int MAX_LOOP = 1000;
+        // int MAX_LOOP = 2;
         boolean isCenterFixed = false;
         int loop = 0;
         int k = Integer.parseInt(args[0]);
 
-        initCentroids(k);
+        File outputF = new File("KM_output/part-r-00000");
+        File centerF = new File("KM_center/centers");
+
+        initCentroids(k,new FileOutputStream(centerF));
 
         while(loop<MAX_LOOP && !isCenterFixed ){
             Job job = getMapReduceJob(args);
 
             job.waitForCompletion(true);
 
-            File outputF = new File("KM_output/part-r-00000");
-            File centerF = new File("KM_center/centers");
 
             List <SiftDescriptor> newCenter = SiftDescriptor.getCenterClusterFromInStream(new FileInputStream(outputF));
-            List <SiftDescriptor> oldCenter = SiftDescriptor.getCenterClusterFromInStream(new FileInputStream(centerF));
+            List <SiftDescriptor> oldCenter = SiftDescriptor.getCenterClusterFromInStream(new FileInputStream(centerF));;
 
             double maxDistance = SiftDescriptor.maxDistance(newCenter, oldCenter, k);
-            isCenterFixed =  maxDistance < 0.0001;
+            isCenterFixed =  maxDistance < 10;
 
             outputF.renameTo(centerF);
             System.out.println("again!!!----" + loop + " distance: " + maxDistance);
@@ -144,9 +162,9 @@ public class KmeanLocal {
             new File("KM_output/.part-r-00000.crc").delete();
             new File("KM_output/_SUCCESS").delete();
             new File("KM_output").delete();
-            File newCenterFile = new File("KM_center/centers");
+
             //填充缺失的质心
-            SiftDescriptor.fullfillCenter(newCenterFile, newCenter, k);
+            SiftDescriptor.fullfillCenter(new FileOutputStream(centerF), newCenter, k);
             loop ++;
         }
 

@@ -1,6 +1,8 @@
 package com.distributKM.sift;
 
 
+import com.distributKM.KmeanLocal;
+
 import java.io.*;
 import java.util.*;
 
@@ -10,12 +12,29 @@ import java.util.*;
  */
 public class SiftDescriptor {
 
-    double desc[] = new double[132];
+    double desc[] = new double[128];
+    double x;
+    double y;
 
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setX(double x){
+        this.x = x;
+    }
+    public double getX(){
+        return this.x;
+    }
 
     public double[] getDescArray() {
         return desc;
     }
+
     //只有质心有标号
     int index = 0;
     public int getIndex() {return index;}
@@ -30,10 +49,25 @@ public class SiftDescriptor {
 
         String[] items = line.split(" ");
         double[] descArray = this.getDescArray();
+        // compatible with both formats
+        // 1st - 128 (descriptor)
+        // 2nd - 4(feature point)  + 128 (descriptor)
 
-        for (int i = 0; i < items.length; i++) {
-            descArray[i] = Double.parseDouble(items[i]);
+        if(items.length > 128) {
+            setX(Double.parseDouble(items[0]));
+            setY(Double.parseDouble(items[1]));
+
+            // item 1-4 is feature point info, sift descriptors starting from 5th item
+            for (int i = 0; i < descArray.length; i++) {
+                descArray[i] = Double.parseDouble(items[i+4]);
+            }
+        } else {
+
+            for (int i = 0; i < descArray.length; i++) {
+                descArray[i] = Double.parseDouble(items[i]);
+            }
         }
+
 
     }
 
@@ -102,7 +136,7 @@ public class SiftDescriptor {
     public double getDistance(SiftDescriptor another) {
 
         double sum = 0.0;
-        for (int i = 4; i < this.getDescArray().length; i++) {
+        for (int i = 0; i < this.getDescArray().length; i++) {
             sum += (this.getDescArray()[i] - another.getDescArray()[i]) * (this.getDescArray()[i] - another.getDescArray()[i]);
         }
 
@@ -182,10 +216,10 @@ public class SiftDescriptor {
     public static String getHistogram(String fileIndex,
                                       List<SiftDescriptor> siftCluster,
                                       List<SiftDescriptor> centroidCluster,
-                                      FileWriter totalWriter) throws Exception{
-        String histogram = new String();
+                                      FileWriter totalWriter, String regionFolder) throws Exception{
+
         String result = "";
-        String regionD = "KM_region/";
+        String regionD = regionFolder;
 
 
         // 区域矩阵
@@ -261,11 +295,11 @@ public class SiftDescriptor {
     }
 
     //获取sift的区域编号
-    private int getRegion(int[][] regionMatrix) {
-        int x = (int)Math.round(getDescArray()[1]);
-        int y = (int)Math.round(getDescArray()[0]);
+    public int getRegion(int[][] regionMatrix) {
+        int x = (int)Math.round(this.getX());
+        int y = (int)Math.round(this.getY());
 
-        return regionMatrix[x][y];
+        return regionMatrix[y][x];
     }
 
     // 获取最大的region数
@@ -283,6 +317,11 @@ public class SiftDescriptor {
         }
 
         return maxRegion;
+    }
+
+    public static int getRegionsCount(int[][] regionMatrix){
+        //region seq starting from zero - 0, so total count is max seq + 1
+        return getMaxRegion(regionMatrix)+1;
     }
 
     // 根据input获取sift cluster
@@ -322,48 +361,99 @@ public class SiftDescriptor {
                 SiftDescriptor randomSift = SiftDescriptor.getRandomSift();
                 sb.append(randomSift.toString() + "\n");
             }
+
             fileWriter.write(sb.toString());
         }
 
         fileWriter.close();
     }
 
+    public static void fullfillCenter(OutputStream output, List<SiftDescriptor> centroids, int centerNumber) throws IOException{
 
-    public static void main(String args[]) {
+        Map<Integer, SiftDescriptor> centroidMap = new HashMap<Integer, SiftDescriptor>();
 
-        String line1 = "238 60 0 0 10 5 9 49 50 12 6 6 3 0 1 2 0 1 7 4 1 0 1 1 0 2 1 0 0 0 1 1 238 85 0 0 9 2 0 0 45 6 1 4 4 9 8 2 8 6 1 1 1 1 6 3 0 3 0 0 0 0 0 0 238 95 0 0 2 0 1 1 24 5 1 8 10 7 3 2 16 3 0 1 2 1 0 9 1 0 0 0 0 0 0 0 238 73 1 0 0 0 0 1 6 4 5 2 3 7 4 1 0 0 3 1 0 1 1 2 0 0 0 0 0 0 0 0 ";
-        String line2 = "0 0 0 0 0 0 0 0 7 1 1 8 0 0 0 1 1 0 1 83 25 0 0 0 0 0 0 21 12 0 0 0 16 1 0 14 9 1 9 23 125 47 7 29 9 1 4 18 18 19 9 125 123 5 5 4 0 0 0 112 57 0 0 0 98 1 2 13 9 61 63 125 115 12 5 27 11 3 32 111 40 5 1 79 73 13 44 45 1 0 1 125 87 0 0 0 125 83 13 12 18 56 20 80 125 19 3 36 20 0 1 31 93 3 2 27 10 0 2 43 10 2 16 109 66 40 3 6 ";
-
-        SiftDescriptor sift1 = new SiftDescriptor(line1);
-        SiftDescriptor sift2 = new SiftDescriptor(line2);
-        SiftDescriptor sift3 = new SiftDescriptor();
-
-        System.out.println("distance: " + sift1.getDistance(sift2));
-        sift3.copy(sift1);
-        System.out.println(sift3);
-        System.out.println(sift1.add(sift2));
-        System.out.println(sift1.shrink(2));
-
-        List cluster = new ArrayList();
-        sift1 = new SiftDescriptor(line1);
-        cluster.add(sift1);
-        cluster.add(sift2);
-
-
-        SiftDescriptor sift4 = SiftDescriptor.getCenterDescriptor(cluster);
-        List cluster2 = new ArrayList();
-
-
-        cluster2.add(sift1);
-        cluster2.add(sift4);
-
-        System.out.println(SiftDescriptor.getCenterDescriptor(cluster));
-
-        System.out.println(SiftDescriptor.maxDistance(cluster, cluster2, 2));
-
-
-        for (int i = 0; i < 50; i++) {
-            System.out.println(SiftDescriptor.getRandomSift());
+        for(SiftDescriptor centroid : centroids){
+            centroidMap.put(centroid.getIndex(), centroid);
         }
+
+        for(int i = 0; i < centerNumber ; i ++){
+            StringBuilder sb = new StringBuilder();
+            sb.append(i);
+            sb.append("\t");
+            if(centroidMap.get(i) != null){
+                sb.append(centroidMap.get(i).toString() + "\n");
+            }else{
+                SiftDescriptor randomSift = SiftDescriptor.getRandomSift();
+                sb.append(randomSift.toString() + "\n");
+            }
+
+            output.write(sb.toString().getBytes());
+        }
+
+        output.close();
+    }
+
+
+
+    public static void main(String args[]) throws Exception {
+
+//        String line1 = "238 60 0 0 10 5 9 49 50 12 6 6 3 0 1 2 0 1 7 4 1 0 1 1 0 2 1 0 0 0 1 1 238 85 0 0 9 2 0 0 45 6 1 4 4 9 8 2 8 6 1 1 1 1 6 3 0 3 0 0 0 0 0 0 238 95 0 0 2 0 1 1 24 5 1 8 10 7 3 2 16 3 0 1 2 1 0 9 1 0 0 0 0 0 0 0 238 73 1 0 0 0 0 1 6 4 5 2 3 7 4 1 0 0 3 1 0 1 1 2 0 0 0 0 0 0 0 0 ";
+//        String line2 = "0 0 0 0 0 0 0 0 7 1 1 8 0 0 0 1 1 0 1 83 25 0 0 0 0 0 0 21 12 0 0 0 16 1 0 14 9 1 9 23 125 47 7 29 9 1 4 18 18 19 9 125 123 5 5 4 0 0 0 112 57 0 0 0 98 1 2 13 9 61 63 125 115 12 5 27 11 3 32 111 40 5 1 79 73 13 44 45 1 0 1 125 87 0 0 0 125 83 13 12 18 56 20 80 125 19 3 36 20 0 1 31 93 3 2 27 10 0 2 43 10 2 16 109 66 40 3 6 ";
+//
+//        SiftDescriptor sift1 = new SiftDescriptor(line1);
+//        SiftDescriptor sift2 = new SiftDescriptor(line2);
+//        SiftDescriptor sift3 = new SiftDescriptor();
+//
+//        System.out.println("distance: " + sift1.getDistance(sift2));
+//        sift3.copy(sift1);
+//        System.out.println(sift3);
+//        System.out.println(sift1.add(sift2));
+//        System.out.println(sift1.shrink(2));
+//
+//        List cluster = new ArrayList();
+//        sift1 = new SiftDescriptor(line1);
+//        cluster.add(sift1);
+//        cluster.add(sift2);
+//
+//
+//        SiftDescriptor sift4 = SiftDescriptor.getCenterDescriptor(cluster);
+//        List cluster2 = new ArrayList();
+//
+//
+//        cluster2.add(sift1);
+//        cluster2.add(sift4);
+//
+//        System.out.println(SiftDescriptor.getCenterDescriptor(cluster));
+//
+//        System.out.println(SiftDescriptor.maxDistance(cluster, cluster2, 2));
+//
+//
+//        for (int i = 0; i < 50; i++) {
+//            System.out.println(SiftDescriptor.getRandomSift());
+//        }
+
+
+
+//        File test = new File("KM_input/test.txt");
+////        PrintWriter pw =new PrintWriter(new OutputStreamWriter(new BufferedOutputStream( new FileOutputStream(test)) )) ;
+//        BufferedWriter bw =new BufferedWriter(new OutputStreamWriter(( new FileOutputStream(test)) )) ;
+//        bw.write("vincent is great !!");
+//        bw.newLine();
+//        bw.write("Thanks.");
+//        bw.close();
+////        pw.flush();
+//
+//        SiftDescriptor.fullfillCenter(new FileOutputStream(test),new ArrayList<SiftDescriptor>(),100);
+
+
+
+
+//        File totalFile = new File("KM_input/");
+//
+//        File[] files = totalFile.listFiles();
+//
+//        System.out.println(files);
+
+        System.out.print("hello");
     }
 }
