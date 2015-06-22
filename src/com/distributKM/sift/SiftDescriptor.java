@@ -312,7 +312,7 @@ public class SiftDescriptor {
             centroidMap.put(centroid.getIndex(), centroid);
         }
 
-        for(int i = 0; i < centerNumber + 1; i ++){
+        for(int i = 0; i < centerNumber; i ++){
             StringBuilder sb = new StringBuilder();
             sb.append(i);
             sb.append("\t");
